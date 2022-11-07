@@ -2,6 +2,7 @@ DESTINATION_DIR = ..
 
 name = new_project
 type = c
+launch_vscode = yes
 
 PROJECT_DIR = $(DESTINATION_DIR)/$(name)
 
@@ -10,10 +11,15 @@ help:
 	@echo
 	@echo "Targets information:"
 	@echo "  help - show this message"
-	@echo "  project - create project with given name and type"
-	@echo "  delete - delete project folder with all content recursively"
+	@echo "  project - create a project"
+	@echo "  delete - recursively remove the project directory"
+	@echo
+	@echo "Options information:"
+	@echo "  name - project name (\"new_project\" - by default)"
+	@echo "  type - project type (can be c or cpp, \"c\" - by default)"
+	@echo "  launch_vscode - determines whether to launch the vscode (can be yes or no, \"yes\" - by default)"
 
-project: create_project_structure create_files #launch_vscode
+project: create_project_structure create_files launch_vscode
 
 create_project_structure:
 	$(shell [ ! -d "$(PROJECT_DIR)" ] && mkdir $(PROJECT_DIR))
@@ -23,10 +29,12 @@ create_project_structure:
 create_files: MAKEFILE CONFIG INIT MAIN GITIGNORE
 
 launch_vscode:
-	@code $(PROJECT_DIR)/
+	@if [ $(launch_vscode) = yes ]; then \
+		code $(PROJECT_DIR)/; \
+	fi
 
 delete:
-	@rm -rf $(PROJECT_DIR)/
+	rm -rf $(PROJECT_DIR)/
 
 test:
 
