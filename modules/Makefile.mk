@@ -5,6 +5,7 @@ MAKEFILE: $(MAKEFILE_FILE)
 $(MAKEFILE_FILE):
 	@echo "Creating $@"
 	@echo "FIRMWARE = \$$(notdir \$$(CURDIR))" > $@
+	@echo "VERSION = " >> $@
 	@echo >> $@
 	@echo "MCU = " >> $@
 	@echo "PACKAGE = " >> $@
@@ -18,6 +19,9 @@ $(MAKEFILE_FILE):
 	@echo "SRC = \$$(shell find src -name '*.$(type)' -type f)" >> $@
 	@echo >> $@
 	@echo "INC_DIR = ./inc" >> $@
+	@echo >> $@
+	@echo "VERSION_HEADER = ./inc/version.$(subst c,h,$(type))" >> $@
+	@echo "VERSION_STRING = ./src/version.$(type)" >> $@
 	@echo >> $@
 	@echo "OBJECTS := \$$(addprefix \$$(BUILD_DIR)/, \$$(SRC))" >> $@
 	@echo "OBJECTS := \$$(OBJECTS:.c=.o)" >> $@
@@ -62,6 +66,11 @@ $(MAKEFILE_FILE):
 	@echo "JTAG_DEV = /dev/com1" >> $@
 	@echo "DEBUG_PORT = 4242" >> $@
 	@echo "DEBUG_HOST = localhost" >> $@
+	@echo >> $@
+	@echo "GIT_BRANCH = \$$(shell git rev-parse --abbrev-ref HEAD)" >> $@
+	@echo "GIT_HASH = \$$(shell git rev-parse HEAD)" >> $@
+	@echo "GIT_HASH_SHORT = \$$(shell git rev-parse --short HEAD)" >> $@
+	@echo "GIT_DATE = \$$(shell git show -s --format=%cD)" >> $@
 	@echo >> $@
 	@echo "MESSAGE_ERRORS_NONE = Errors: none" >> $@
 	@echo "MESSAGE_BEGIN = -------- begin --------" >> $@
