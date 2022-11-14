@@ -6,3 +6,4 @@ $(GITIGNORE_FILE):
 	@echo "Creating $@"
 	@echo ".vscode" > $@
 	@echo "build" >> $@
+	@echo "*/version.*" >> $@
