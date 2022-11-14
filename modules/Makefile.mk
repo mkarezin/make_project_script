@@ -138,7 +138,7 @@ $(MAKEFILE_FILE):
 	@echo >> $@
 	@echo ".SECONDARY: \$$(BUILD_DIR)/\$$(FIRMWARE).elf" >> $@
 	@echo ".PRECIOUS: \$$(OBJECTS)" >> $@
-	@echo "%.elf: \$$(OBJECTS) ./inc/config.$(subst c,h,$(type))" >> $@
+	@echo "%.elf: \$$(OBJECTS)" >> $@
 	@echo "\t@echo" >> $@
 	@echo "\t@echo \$$(MESSAGE_LINKING) \$$@" >> $@
 	@echo "\t@\$$(CCOMPILER) \$$(CFLAGS) \$$^ -o \$$@ \$$(LDFLAGS)" >> $@
@@ -169,7 +169,7 @@ $(MAKEFILE_FILE):
 	@echo "\t@echo \$$(MESSAGE_SYMBOL_TABLE) \$$@" >> $@
 	@echo "\t@\$$(OBJDUMP) -h -S -z \$$< > \$$@" >> $@
 	@echo >> $@
-	@echo "\$$(BUILD_DIR)/%.o: %.c" >> $@
+	@echo "\$$(BUILD_DIR)/%.o: %.c ./inc/config.$(subst c,h,$(type))" >> $@
 	@echo "\t@\$$(shell [ ! -d \"\$$(BUILD_DIR)\" ] && mkdir \$$(BUILD_DIR))" >> $@
 	@echo "\t@\$$(shell [ ! -d \"\$$(BUILD_DIR)/\$$(dir \$$<)\" ] && mkdir \$$(BUILD_DIR)/\$$(dir \$$<))" >> $@
 	@echo "\t@echo" >> $@
