@@ -243,4 +243,3 @@ $(MAKEFILE_FILE):
 	@echo ".PHONY: all begin gccversion sizebefore build \\" >> $@
 	@echo "\telf hex eep lss sym fuse sizeafter end programm \\" >> $@
 	@echo "\tverify clean clean_list test" >> $@
-	@echo >> $@

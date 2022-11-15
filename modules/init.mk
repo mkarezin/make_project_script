@@ -15,7 +15,6 @@ $(INIT_SOURCE):
 	@echo "{" >> $@
 	@echo "\treturn;" >> $@
 	@echo "}" >> $@
-	@echo >> $@
 
 $(INIT_HEADER):
 	@echo "Creating $@"
@@ -26,4 +25,3 @@ $(INIT_HEADER):
 	elif [ $(type) = cpp ]; then \
 		echo "void mcuInit();" >> $@; \
 	fi
-	@echo >> $@

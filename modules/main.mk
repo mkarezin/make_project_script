@@ -22,7 +22,6 @@ $(MAIN_SOURCE):
 	@echo >> $@
 	@echo "\treturn 0;" >> $@
 	@echo "}" >> $@
-	@echo >> $@
 
 $(MAIN_HEADER):
 	@echo "Creating $@"
@@ -30,4 +29,3 @@ $(MAIN_HEADER):
 	@echo >> $@
 	@echo "#include \"config.$(subst c,h,$(type))\"" >> $@
 	@echo "#include \"init.$(subst c,h,$(type))\"" >> $@
-	@echo >> $@
