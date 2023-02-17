@@ -191,8 +191,8 @@ $(MAKEFILE_FILE):
 	@echo "\t@\$$(CCOMPILER) -MM \$$(CFLAGS) \$$< > \$$(BUILD_DIR)/\$$*.d" >> $@
 	@echo >> $@
 	@echo "\$$(BUILD_DIR)/%.s: %.c" >> $@
-	@echo "\t@\$$(shell [ ! -d \"\$$(BUILD_DIR)\" ] && mkdir \$$(BUILD_DIR))" >> $@
-	@echo "\t@\$$(shell [ ! -d \"\$$(BUILD_DIR)/\$$(dir \$$<)\" ] && mkdir \$$(BUILD_DIR)/\$$(dir \$$<))" >> $@
+	@echo "\t@\$$(shell [ ! -d \"\$$(BUILD_DIR)\" ] && mkdir -p \$$(BUILD_DIR))" >> $@
+	@echo "\t@\$$(shell [ ! -d \"\$$(BUILD_DIR)/\$$(dir \$$<)\" ] && mkdir -p \$$(BUILD_DIR)/\$$(dir \$$<))" >> $@
 	@echo "\t@\$$(CCOMPILER) -S \$$(CFLAGS) \$$< -o \$$@" >> $@
 	@echo >> $@
 	@echo "\$$(VERSION_HEADER):" >> $@
