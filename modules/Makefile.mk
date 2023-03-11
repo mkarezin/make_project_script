@@ -71,9 +71,9 @@ $(MAKEFILE_FILE):
 		echo "NM = avr-nm" >> $@; \
 	elif [ $(arch) = arm ]; then \
 		echo "SIZE = " >> $@; \
-		echo "OBJCOPY = fromelf" >> $@; \
+		echo "OBJCOPY = \$$(CCOMPILER)/fromelf" >> $@; \
 		echo "OBJDUMP = " >> $@; \
-		echo "AR = armar" >> $@; \
+		echo "AR = \$$(CCOMPILER)/armar" >> $@; \
 		echo "NM = " >> $@; \
 	fi
 	@echo "REMOVE = rm -f" >> $@
@@ -107,8 +107,13 @@ $(MAKEFILE_FILE):
 	@echo "MESSAGE_END = --------  end  --------" >> $@
 	@echo "MESSAGE_SIZE_BEFORE = Size before:" >> $@
 	@echo "MESSAGE_SIZE_AFTER = Size after:" >> $@
-	@echo "MESSAGE_COFF = Converting to AVR COFF:" >> $@
-	@echo "MESSAGE_ENTENDED_COFF = Converting to AVR Extended COFF:" >> $@
+	@if [ $(arch) = avr ]; then \
+		echo "MESSAGE_COFF = Converting to AVR COFF:" >> $@; \
+		echo "MESSAGE_ENTENDED_COFF = Converting to AVR Extended COFF:" >> $@; \
+	else \
+		echo "MESSAGE_COFF = " >> $@; \
+		echo "MESSAGE_ENTENDED_COFF = " >> $@; \
+	fi
 	@echo "MESSAGE_FLASH = Creating load file for Flash:" >> $@
 	@echo "MESSAGE_EEPROM = Creting load file for EEPROM:" >> $@
 	@echo "MESSAGE_EXTENDED_LISTING = Creating Extended Listing:" >> $@
