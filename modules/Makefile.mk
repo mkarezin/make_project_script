@@ -16,18 +16,26 @@ $(MAKEFILE_FILE):
 	@echo >> $@
 	@echo "BUILD_DIR = ./build" >> $@
 	@echo >> $@
-	@echo "SRC = \$$(shell find src -name '*.$(type)' -type f)" >> $@
+	@echo "SRC_DIR = ./src" >> $@
+	@echo "SRC = \$$(shell find \$$(SRC_DIR) -name '*.$(type)' -type f)" >> $@
 	@echo >> $@
 	@echo "INC_DIR = ./inc" >> $@
+	@if [ $(arch) = arm ]; then \
+		echo >> $@; \
+		echo "CCOMPILER_DIR = " >> $@; \
+	fi
 	@echo >> $@
-	@echo "VERSION_HEADER = ./inc/version.$(subst c,h,$(type))" >> $@
-	@echo "VERSION_STRING = ./src/version.$(type)" >> $@
+	@echo "VERSION_HEADER = \$$(INC_DIR)/version.$(subst c,h,$(type))" >> $@
+	@echo "VERSION_STRING = \$$(SRC_DIR)/version.$(type)" >> $@
 	@echo >> $@
 	@echo "OBJECTS := \$$(addprefix \$$(BUILD_DIR)/, \$$(SRC))" >> $@
 	@echo "OBJECTS := \$$(OBJECTS:.c=.o)" >> $@
 	@echo >> $@
 	@echo "DEFINES = -DF_CPU=\$$(F_CPU)UL" >> $@
-	@echo "DEFINES += -D__AVR_ATmega8__" >> $@
+	@if [ $(arch) = avr ]; then \
+		echo "DEFINES += -D__AVR_ATmega8__" >> $@; \
+	fi
+	@echo "DEFINES += " >> $@
 	@echo >> $@
 	@echo "CFLAGS = -O1 -g" >> $@
 	@echo "CFLAGS += \$$(addprefix -I, \$$(INC_DIR))" >> $@
@@ -41,20 +49,42 @@ $(MAKEFILE_FILE):
 	@echo "LDFLAGS += -Wl,--gc-sections" >> $@
 	@echo >> $@
 	@if [ $(type) = c ]; then \
-		echo "CCOMPILER = avr-gcc" >> $@; \
+		if [ $(arch) = avr ]; then \
+			echo "CCOMPILER = avr-gcc" >> $@; \
+		elif [ $(arch) = arm ]; then \
+			echo "CCOMPILER = \$$(CCOMPILER_DIR)/armclang" >> $@; \
+		else \
+			echo "CCOMPILER = " >> $@; \
+		fi; \
 	elif [ $(type) = cpp ]; then \
-		echo "CCOMPILER = avr-g++" >> $@; \
+		if [ $(arch) = avr ]; then \
+			echo "CCOMPILER = avr-g++" >> $@; \
+		else \
+			echo "CCOMPILER = " >> $@; \
+		fi; \
 	fi
-	@echo "SIZE = avr-size" >> $@
-	@echo "OBJCOPY = avr-objcopy" >> $@
-	@echo "OBJDUMP = avr-objdump" >> $@
-	@echo "AR = avr-ar rcs" >> $@
-	@echo "NM = avr-nm" >> $@
+	@if [ $(arch) = avr ]; then \
+		echo "SIZE = avr-size" >> $@; \
+		echo "OBJCOPY = avr-objcopy" >> $@; \
+		echo "OBJDUMP = avr-objdump" >> $@; \
+		echo "AR = avr-ar rcs" >> $@; \
+		echo "NM = avr-nm" >> $@; \
+	elif [ $(arch) = arm ]; then \
+		echo "SIZE = " >> $@; \
+		echo "OBJCOPY = fromelf" >> $@; \
+		echo "OBJDUMP = " >> $@; \
+		echo "AR = armar" >> $@; \
+		echo "NM = " >> $@; \
+	fi
 	@echo "REMOVE = rm -f" >> $@
 	@echo "REMOVEDIR = rm -rf" >> $@
 	@echo >> $@
-	@echo "PROGRAMMER = minipro" >> $@
-	@echo "PROGRAMMER_FLAGS = -p \$$(MCU)@\$$(PACKAGE)" >> $@
+	@if [ $(arch) = arm ]; then \
+		echo "PROGRAMMER = " >> $@; \
+	else \
+		echo "PROGRAMMER = minipro" >> $@; \
+		echo "PROGRAMMER_FLAGS = -p \$$(MCU)@\$$(PACKAGE)" >> $@; \
+	fi
 	@echo >> $@
 	@echo "#----------- Debugging Options ------------" >> $@
 	@echo "DEBUG_MFREQ = \$$(F_CPU)" >> $@
@@ -84,8 +114,11 @@ $(MAKEFILE_FILE):
 	@echo "MESSAGE_EXTENDED_LISTING = Creating Extended Listing:" >> $@
 	@echo "MESSAGE_SYMBOL_TABLE = Creating Symbol Table:" >> $@
 	@echo "MESSAGE_LINKING = Linking:" >> $@
-	@echo "MESSAGE_COMPILING_C = Compiling C:" >> $@
-	@echo "MESSAGE_COMPILING_CPP = Compiling C++:" >> $@
+	@if [ $(type) = c ]; then \
+		echo "MESSAGE_COMPILING_C = Compiling C:" >> $@; \
+	elif [ $(type) = cpp ]; then \
+		echo "MESSAGE_COMPILING_CPP = Compiling C++:" >> $@; \
+	fi
 	@echo "MESSAGE_ASSEMBLING = Assembling:" >> $@
 	@echo "MESSAGE_CLEANING = Cleaning project:" >> $@
 	@echo "MESSAGE_CREATING_LIBRARY = Creating library:" >> $@

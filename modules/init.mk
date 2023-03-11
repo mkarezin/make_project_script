@@ -18,10 +18,13 @@ $(INIT_SOURCE):
 
 $(INIT_HEADER):
 	@echo "Creating $@"
-	@echo "#pragma once" > $@
+	@echo "#ifndef _INIT_H_" > $@
+	@echo "#define _INIT_H_" >> $@
 	@echo >> $@
 	@if [ $(type) = c ]; then \
 		echo "void mcuInit(void);" >> $@; \
 	elif [ $(type) = cpp ]; then \
 		echo "void mcuInit();" >> $@; \
 	fi
+	@echo >> $@
+	@echo "#endif // _INIT_H_" >> $@

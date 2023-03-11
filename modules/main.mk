@@ -6,6 +6,8 @@ MAIN: $(MAIN_SOURCE) $(MAIN_HEADER)
 $(MAIN_SOURCE):
 	@echo "Creating $@"
 	@echo "#include \"main.$(subst c,h,$(type))\"" > $@
+	@echo "#include \"config.$(subst c,h,$(type))\"" >> $@
+	@echo "#include \"init.$(subst c,h,$(type))\"" >> $@
 	@echo >> $@
 	@if [ $(type) = c ]; then \
 		echo "int main(void)" >> $@; \
@@ -19,13 +21,13 @@ $(MAIN_SOURCE):
 	@echo "\t{" >> $@
 	@echo "\t\t_NOP();" >> $@
 	@echo "\t}" >> $@
-	@echo >> $@
-	@echo "\treturn 0;" >> $@
 	@echo "}" >> $@
 
 $(MAIN_HEADER):
 	@echo "Creating $@"
-	@echo "#pragma once" > $@
+	@echo "#ifndef _MAIN_H_" > $@
+	@echo "#define _MAIN_H_" >> $@
 	@echo >> $@
-	@echo "#include \"config.$(subst c,h,$(type))\"" >> $@
-	@echo "#include \"init.$(subst c,h,$(type))\"" >> $@
+	@echo >> $@
+	@echo >> $@
+	@echo "#endif // _MAIN_H_" >> $@

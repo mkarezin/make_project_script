@@ -1,10 +1,11 @@
-DESTINATION_DIR = ..
+UPPER_DIR = ..
 
 name = new_project
 type = c
 launch_vscode = yes
+arch = arm
 
-PROJECT_DIR = $(DESTINATION_DIR)/$(name)
+PROJECT_DIR = $(UPPER_DIR)/$(name)
 
 help:
 	@echo "Usage: make target [options]"
@@ -18,6 +19,7 @@ help:
 	@echo "  name - project name (\"new_project\" - by default)"
 	@echo "  type - project type (can be c or cpp, \"c\" - by default)"
 	@echo "  launch_vscode - determines whether to launch the vscode (can be yes or no, \"yes\" - by default)"
+	@echo "  arch - MCU architecture (can be arm, avr, pic, \"arm\" - by default)"
 
 project: create_project_structure create_files launch_vscode
 
